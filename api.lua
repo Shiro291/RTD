@@ -204,6 +204,11 @@ function api:Place(tower, position, time, wave)
     if waitTime(time, wave) then    
         state.totalplacedtowers = state.totalplacedtowers + 1
         
+        -- Fix for Doombringer taking 2 entity slots
+        if tower == "Doombringer" then
+            state.totalplacedtowers = state.totalplacedtowers + 1
+        end
+        
         updatelog("Placed Tower " .. tostring(tower))
         bytenet.Towers.PlaceTower.invoke({["Position"] = position, ["Rotation"] = 0, ["TowerID"] = tower})
     end
