@@ -1,0 +1,289 @@
+Local api = loadstring(game:HttpGet('https://raw.githubusercontent.com/ovoch228/shitty-x/refs/heads/main/rtd/recorder'))()
+
+api:Loadout({'Doombringer', 'Sniper', 'BloxxerBlue', 'Taser', 'Paintballer'})
+api:Map('Crossroads', {})
+
+api:Start()
+
+api:Loop(function()
+	 api:Difficulty('Casual')
+	 api:Place('Paintballer', Vector3.new(-1459.74658203125, 9.5, 767.2946166992188), 0, 1)
+	 api:Place('Paintballer', Vector3.new(-1463.2916259765625, 9.499999046325684, 767.1901245117188), 1, 1)
+	 api:Ready(2, 1)
+	 api:AutoSkip(true, 4, 1)
+	 api:Place('Sniper', Vector3.new(-1457.302001953125, 15.499994277954102, 756.83251953125), 58, 4)
+	 api:Upgrade(1, 64, 4)
+	 api:Upgrade(2, 68, 4)
+	 api:Upgrade(3, 70, 4)
+	 api:Upgrade(3, 72, 5)
+	 api:Place('Sniper', Vector3.new(-1451.136474609375, 13.5, 745.1085815429688), 102, 6)
+	 api:Upgrade(4, 106, 7)
+	 api:Upgrade(4, 108, 7)
+	 api:Place('Sniper', Vector3.new(-1457.467041015625, 14.5, 737.1951904296875), 128, 7)
+	 api:Upgrade(5, 130, 8)
+	 api:Upgrade(5, 132, 8)
+	 api:Place('Sniper', Vector3.new(-1443.06689453125, 13.5, 744.7465209960938), 144, 8)
+	 api:Upgrade(6, 146, 8)
+	 api:Upgrade(6, 146, 8)
+	 api:Place('Sniper', Vector3.new(-1442.729736328125, 13.5, 738.293212890625), 154, 9)
+	 api:Upgrade(7, 156, 9)
+	 api:Upgrade(7, 158, 9)
+	 api:Place('Taser', Vector3.new(-1459.4002685546875, 9.5, 751.4324340820312), 170, 10)
+	 api:Place('Paintballer', Vector3.new(-1463.333984375, 9.499999046325684, 751.4869995117188), 178, 10)
+	 api:Place('Paintballer', Vector3.new(-1463.5234375, 9.500000953674316, 747.4234008789062), 184, 10)
+	 api:Place('Doombringer', Vector3.new(-1459.2445068359375, 9.5, 747.1299438476562), 192, 10)
+	 api:Upgrade(11, 196, 11)
+	 api:Upgrade(8, 226, 12)
+	 api:Upgrade(9, 230, 12)
+	 api:Upgrade(10, 250, 13)
+	 api:Place('Taser', Vector3.new(-1459.48779296875, 9.5, 744.0916748046875), 278, 15)
+	 api:Upgrade(12, 280, 15)
+	 api:Upgrade(11, 284, 15)
+	 api:Place('Taser', Vector3.new(-1463.5799560546875, 9.499999046325684, 743.9801635742188), 296, 15)
+	 api:Upgrade(13, 298, 16)
+	 api:Upgrade(3, 306, 16)
+	 api:Upgrade(3, 318, 17)
+	 api:Upgrade(4, 334, 18)
+	 api:Upgrade(4, 344, 18)
+	 api:Upgrade(5, 354, 19)
+	 api:Upgrade(5, 372, 19)
+	 api:Upgrade(11, 398, 21)
+	 api:Upgrade(11, 424, 22)
+	 api:Upgrade(7, 438, 23)
+	 api:Upgrade(7, 446, 23)
+	 api:Upgrade(6, 458, 24)
+	 api:Upgrade(6, 460, 24)
+	 api:Place('Sniper', Vector3.new(-1456.9593505859375, 15.499994277954102, 763.1011352539062), 476, 24)
+	 api:Upgrade(14, 480, 24)
+	 api:Upgrade(14, 480, 24)
+	 api:Upgrade(14, 482, 24)
+	 api:Upgrade(14, 486, 25)
+	 api:Place('Sniper', Vector3.new(-1456.810302734375, 15.499994277954102, 760.0364379882812), 498, 25)
+	 api:Upgrade(15, 500, 25)
+	 api:Upgrade(15, 502, 25)
+	 api:PlayAgain() 
+ end)
+
+above is a script from macro recorder from tower defense, this is the recorder above is the result
+local replicatedstorage = game:GetService("ReplicatedStorage")
+
+local library = loadstring(game:HttpGet('https://raw.githubusercontent.com/ovoch228/depthsoimgui/refs/heads/main/library'))()
+
+local bytenet = require(replicatedstorage:WaitForChild("Teawork"):WaitForChild("Shared"):WaitForChild("Services"):WaitForChild("ByteNetworking"))
+
+local api = {}
+
+function api:Loadout(towers: table)
+	if game.PlaceId ~= 98936097545088 then return end
+
+	for i = 1, #towers do
+		bytenet.Inventory.EquipTower.invoke({["TowerID"] = towers[i], ["Slot"] = i})
+		task.wait(0.5)
+	end
+end
+
+function api:Map(map: string, modifiers: table)
+	if game.PlaceId ~= 98936097545088 then return end
+	
+	bytenet.MatchmakingNew.CreateSingleplayer.invoke({["Gamemode"] = "Standard", ["MapID"] = map, ["Modifiers"] = modifiers})
+end
+
+if game.PlaceId ~= 124069847780670 then return api end
+
+local towers = bytenet.Towers
+local mapinfo = replicatedstorage.RoundInfo
+
+local roundresultui = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.RoundResult
+
+local ostime = os.time
+local taskwait = task.wait
+local env = getgenv()
+
+env.StratName = "Strat"
+
+env.timer = 0 -- seconds
+env.waveinfo = 1
+env.isroundover = false
+
+env.totalplacedtowers = 0
+env.firsttower = 1
+
+env.destroyui = false
+
+local window = library:CreateWindow({
+    Title = "Shitty X",
+    Size = UDim2.new(0, 350, 0, 370),
+    Position = UDim2.new(0.5, 0, 0, 70),
+    NoResize = false
+})
+
+window:Center()
+
+local logtab = window:CreateTab({
+    Name = "Macro Player",
+    Visible = true
+})
+
+local filename = logtab:Label({
+    Text = "StratName: " .. env.StratName
+})
+
+local logstab = window:CreateTab({
+    Name = "Logs",
+    Visible = true
+})
+
+local loglabel = logtab:Label({
+    Label = "Last Log: Voting"
+})
+
+local row = logstab:Row()
+
+logstab:Separator({
+	Text = "Logs:"
+})
+
+local logs = logstab:Console({
+	Text = "",
+	ReadOnly = true,
+	LineNumbers = false,
+	Border = false,
+	Fill = true,
+	Enabled = true,
+	AutoScroll = true,
+	RichText = true,
+	MaxLines = 200
+})
+
+function updatelog(text: string)
+	setthreadidentity(7)
+	logs:AppendText(DateTime.now():FormatLocalTime("HH:mm:ss", "en-us") .. ":", text)
+	loglabel:SetText("Last Log: " .. text)
+end
+
+window:ShowTab(logtab)
+updatelog("Voting")
+
+function waitTime(time, wave)
+	while waveinfo < wave and not isroundover do
+		taskwait(0.05)
+	end
+	   
+    	while timer < time and not isroundover do
+        	taskwait(0.05)
+    	end
+    	
+    	return not isroundover
+end
+
+function api:Loop(func)
+	if game.PlaceId ~= 124069847780670 then return end 
+	
+	while taskwait(0.03) do				
+		func()
+	end
+end
+
+function api:Start()
+	bytenet.Timescale.SetTimescale.send(2)
+
+	env.waveinfo = mapinfo:GetAttribute("Wave") or 1
+	env.timer = 0
+	
+	mapinfo:GetAttributeChangedSignal("Wave"):Connect(function()
+		env.waveinfo = mapinfo:GetAttribute("Wave")
+	end)
+
+	roundresultui:GetPropertyChangedSignal("Visible"):Connect(function()
+		isroundover = roundresultui.Visible
+	end)
+	
+	updatelog("Game Started")
+		
+	local RunService = game:GetService("RunService")
+	if env.timerConnection then
+		env.timerConnection:Disconnect()
+	end
+	env.timer = 0
+	env.timerConnection = RunService.Heartbeat:Connect(function(dt)
+		env.timer = env.timer + (dt * 2)
+	end)
+end
+
+function api:Difficulty(diff: string)
+	updatelog(`Voted difficulty {diff}`)
+	bytenet.DifficultyVote.Vote.send(diff)
+	
+	while #mapinfo:GetAttribute("Difficulty") == 0 do taskwait(0.05) end 
+	
+	env.timer = 0
+	env.waveinfo = 1
+	
+	taskwait(0.1)
+end
+
+function api:Ready(time: number, wave: number)
+	if waitTime(time, wave) then updatelog("Sent ready vote") bytenet.ReadyVote.Vote.send(true) end
+end
+
+function api:Skip(time: number, wave: number)
+	if waitTime(time, wave) then updatelog(`Skipping Wave {wave}`) replicatedstorage:WaitForChild("ByteNetReliable"):FireServer(buffer.fromstring("\148\001")) end
+end
+
+function api:AutoSkip(enable: number, time: number, wave: number)
+	if waitTime(time, wave) then updatelog(`AutoSkip set to {tostring(enable)}`) bytenet.SkipWave.ToggleAutoSkip.send(enable) end
+end
+
+function api:Place(tower: string, position: Vector3, time: number, wave: number)
+	if waitTime(time, wave) then	
+		env.totalplacedtowers = env.totalplacedtowers + 1
+		
+		updatelog(`Placed Tower {tower}`)
+		towers.PlaceTower.invoke({["Position"] = position, ["Rotation"] = 0, ["TowerID"] = tower})
+	end
+end
+
+function api:Upgrade(tower: number, time: number, wave: number)
+	if waitTime(time, wave) then
+		updatelog(`Upgraded Tower {tower}`)
+		
+		local realindex = firsttower + (tower - 1)
+		towers.UpgradeTower.invoke(realindex)
+	end
+end
+
+function api:SetTarget(tower: number, target: string, time: number, wave: number)
+	if waitTime(time, wave) then
+		updatelog(`Changed Tower {tower} Target to {target} `)
+	
+		local realindex = firsttower + (tower - 1)
+		towers.SetTargetMode.send({["UID"] = (realindex), ["TargetMode"] = target})
+	end
+end
+
+function api:Sell(tower: number, time: number, wave: number)
+	if waitTime(time, wave) then
+		updatelog(`Sold Tower {tower}`) 
+		
+		local realindex = firsttower + (tower - 1)
+		towers.SellTower.invoke(realindex)
+	end
+end
+
+function api:PlayAgain()
+	while not isroundover do taskwait(0.1) end
+	
+	env.firsttower = 1
+	env.totalplacedtowers = 0
+	
+	env.timer = 0
+	env.waveinfo = 1
+	
+	taskwait(1)
+	
+	bytenet.RoundResult.VoteForRestart.send(true)
+	updatelog("Voted for restart")
+	--print('vote restart success:')
+end
+
+return api
