@@ -80,7 +80,7 @@ local writebutton = filetab:Button({
   	Text = "Write File",
     	Callback = function()
    		writefile(getgenv().StratName .. '.txt',
-    			"local api = loadstring(game:HttpGet('https://raw.githubusercontent.com/ovoch228/shitty-x/refs/heads/main/rtd/api'))()\n\n" .. 
+    			"local api = loadstring(game:HttpGet('https://raw.githubusercontent.com/Shiro291/RTD/refs/heads/main/api'))()\n\n" .. 
     			`api:Loadout({plrtowers})\n` ..
     			`api:Map('{map}', {modifiers})\n\n` ..
     			"api:Start()\n\n" ..
