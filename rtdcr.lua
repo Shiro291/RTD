@@ -12,7 +12,7 @@ api:Loop(function()
 	 api:Place('Paintballer', Vector3.new(-1463.2916259765625, 9.499999046325684, 767.1901245117188), 1, 1)
 	 
 	 -- Ready shifted from 10 -> 0 (instant after places)
-	 api:Ready(0, 1)
+	 api:Ready(2, 1)
 	 
 	 -- All subsequent actions shifted by -10 relative to previous (which was already -42 relative to original)
 	 -- Original: AutoSkip @ 54 -> 12 -> 2
