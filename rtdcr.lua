@@ -1,4 +1,4 @@
-local api = loadstring(game:HttpGet('https://raw.githubusercontent.com/Shiro291/RTD/refs/heads/main/api'))()
+local api = loadstring(game:HttpGet('https://raw.githubusercontent.com/Shiro291/RTD/refs/heads/main/api.lua'))()
 
 api:Loadout({'Doombringer', 'Sniper', 'BloxxerBlue', 'Taser', 'Paintballer'})
 api:Map('Crossroads', {})
