@@ -1,4 +1,4 @@
-local api = loadstring(readfile('RTD/api.lua'))()
+local api = loadstring(game:HttpGet('https://raw.githubusercontent.com/Shiro291/RTD/refs/heads/main/api'))()
 
 api:Loadout({'Doombringer', 'Sniper', 'BloxxerBlue', 'Taser', 'Paintballer'})
 api:Map('Crossroads', {})
@@ -9,7 +9,7 @@ api:Loop(function()
 	 api:Difficulty('Casual')
 	 -- First two are already at time 0, they stay at 0
 	 api:Place('Paintballer', Vector3.new(-1459.74658203125, 9.5, 767.2946166992188), 0, 1)
-	 api:Place('Paintballer', Vector3.new(-1463.2916259765625, 9.499999046325684, 767.1901245117188), 0, 1)
+	 api:Place('Paintballer', Vector3.new(-1463.2916259765625, 9.499999046325684, 767.1901245117188), 1, 1)
 	 
 	 -- Ready shifted from 10 -> 0 (instant after places)
 	 api:Ready(0, 1)
