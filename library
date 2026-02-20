@@ -1,3 +1,8 @@
+--// Cache check
+if getgenv().SharedImGuiLibrary then
+	return getgenv().SharedImGuiLibrary
+end
+
 local ImGui = {
 	Animations = {
 		Buttons = {
@@ -41,6 +46,7 @@ local ImGui = {
 	UIAssetId = "rbxassetid://76246418997296"
 }
 
+getgenv().SharedImGuiLibrary = ImGui
 
 --// Universal functions
 local NullFunction = function() end
@@ -1529,6 +1535,23 @@ function ImGui:CreateWindow(WindowConfig)
 	local CloseButton: TextButton = TitleBar.Close
 	CloseButton.Visible = WindowConfig.NoClose ~= true
 
+	--// Minimize Window
+	local MinimizeButton: TextButton = CloseButton:Clone()
+	MinimizeButton.Name = "Minimize"
+	MinimizeButton.Text = "-"
+	MinimizeButton.Parent = TitleBar
+	MinimizeButton.Visible = WindowConfig.NoClose ~= true
+
+	-- Adjust Close position to make room for Minimize
+	if CloseButton.Visible then
+		local originalPos = CloseButton.Position
+		MinimizeButton.Position = UDim2.new(originalPos.X.Scale, originalPos.X.Offset - 30, originalPos.Y.Scale, originalPos.Y.Offset)
+	end
+
+	MinimizeButton.Activated:Connect(function()
+		ImGui:MinimizeAll()
+	end)
+
 	function WindowConfig:Close()
 		local Callback = WindowConfig.CloseCallback
 		WindowConfig:SetVisible(false)
@@ -1773,6 +1796,84 @@ ImGui.FullScreenGui = ImGui:CreateInstance("ScreenGui", GuiParent, {
 	ResetOnSpawn = false,
 	ScreenInsets = Enum.ScreenInsets.None
 })
+
+--// Floating Ball
+ImGui.FloatingBall = ImGui:CreateInstance("ImageButton", ImGui.FullScreenGui, {
+	Name = "FloatingBall",
+	Size = UDim2.fromOffset(50, 50),
+	Position = UDim2.new(0.5, -25, 0.1, 0),
+	BackgroundTransparency = 0,
+	BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+	Image = "rbxassetid://11414417100",  -- Custom modern macro or Depso-like icon
+	Visible = false,
+	AutoButtonColor = true,
+	ClipsDescendants = true
+})
+
+local BallCorner = ImGui:CreateInstance("UICorner", ImGui.FloatingBall, {
+	CornerRadius = UDim.new(1, 0)
+})
+
+local BallStroke = ImGui:CreateInstance("UIStroke", ImGui.FloatingBall, {
+	Color = Color3.fromRGB(255, 255, 255),
+	Thickness = 2,
+	Transparency = 0.5
+})
+
+
+ImGui.FloatingBall.Activated:Connect(function()
+	ImGui:RestoreAll()
+end)
+
+ImGui.FloatingBallHover = ImGui:ConnectHover({
+	Parent = ImGui.FloatingBall,
+	OnInput = function(MouseHovering, Input)
+		if not MouseHovering then
+			ImGui:Tween(ImGui.FloatingBall, {BackgroundTransparency = 0, ImageTransparency = 0})
+		else
+			ImGui:Tween(ImGui.FloatingBall, {BackgroundTransparency = 0.3, ImageTransparency = 0.2})
+		end
+	end,
+})
+
+ImGui:ApplyDraggable(ImGui.FloatingBall)
+
+local PreviousWindowStates = {}
+
+function ImGui:MinimizeAll()
+	ImGui.FloatingBall.Visible = true
+	local AnimProps = {Size = UDim2.fromOffset(0,0), Position = ImGui.FloatingBall.Position}
+	
+	for Window, Config in pairs(ImGui.Windows) do
+		if Window.Visible then
+			PreviousWindowStates[Window] = {
+				Size = Window.Size,
+				Position = Window.Position,
+				Open = Config.Open
+			}
+			
+			ImGui:Tween(Window, AnimProps)
+			task.delay(ImGui.Animation.Time, function()
+				if ImGui.FloatingBall.Visible then
+					Window.Visible = false
+				end
+			end)
+		end
+	end
+end
+
+function ImGui:RestoreAll()
+	ImGui.FloatingBall.Visible = false
+	
+	for Window, Config in pairs(ImGui.Windows) do
+		local PrevState = PreviousWindowStates[Window]
+		if PrevState then
+			Window.Visible = true
+			ImGui:Tween(Window, {Size = PrevState.Size, Position = PrevState.Position})
+			PreviousWindowStates[Window] = nil
+		end
+	end
+end
 
 return ImGui
 
