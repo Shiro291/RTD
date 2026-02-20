@@ -114,6 +114,12 @@ function api:InitUI()
     state.Logs = logstab:Console({
         Text = "",
         ReadOnly = true,
+        LineNumbers = false,
+        Border = false,
+        Fill = true,
+        Enabled = true,
+        AutoScroll = true,
+        RichText = true,
         MaxLines = 200
     })
     
@@ -138,10 +144,6 @@ function api:Start()
     local roundresultui = game:GetService("Players").LocalPlayer.PlayerGui.GameUI.RoundResult
     roundresultui:GetPropertyChangedSignal("Visible"):Connect(function()
         state.isroundover = roundresultui.Visible
-        if state.isroundover and state.TimerConnection then
-            state.TimerConnection:Disconnect()
-            state.TimerConnection = nil
-        end
     end)
     
     updatelog("Macro started")
@@ -157,7 +159,7 @@ end
 function api:Loop(func)
     if game.PlaceId ~= 124069847780670 then return end 
     task.spawn(function()
-        while not state.isroundover do
+        while true do
             func()
             task.wait(0.03)
         end
@@ -242,9 +244,6 @@ function api:PlayAgain()
     
     state.timer = 0
     state.waveinfo = 1
-    
-    if state.TimerConnection then state.TimerConnection:Disconnect() end
-    state.TimerConnection = nil
 
     task.wait(1)
     
